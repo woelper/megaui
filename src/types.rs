@@ -12,6 +12,20 @@ impl Vector2 {
     pub fn distance(self, other: Vector2) -> f32 {
         ((self.x - other.x) * (self.x - other.x) + (self.y - other.y) * (self.y - other.y)).sqrt()
     }
+
+    pub fn set_x(self, x: f32) -> Vector2 {
+        Vector2 {
+            x,
+            y: self.y
+        }
+    }
+
+    pub fn set_y(self, y: f32) -> Vector2 {
+        Vector2 {
+            x: self.x,
+            y
+        }
+    }
 }
 
 impl std::ops::Add for Vector2 {

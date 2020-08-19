@@ -385,6 +385,46 @@ impl Ui {
             clipboard: Box::new(crate::LocalClipboard::new()),
         }
     }
+    pub fn new_with_scale(scale: f32) -> Ui {
+        let mut font_atlas = FontAtlas::new(
+            &include_bytes!("../assets/ProggyClean.ttf")[..],
+            (16. * scale) as u32,
+            FontAtlas::ascii_character_list(),
+        )
+        .unwrap();
+
+        let white_square = [(0, 0), (1, 0), (1, 1), (0, 1)];
+        let w = font_atlas.texture.width;
+        for pixel in white_square.iter() {
+            font_atlas.texture.data[(pixel.0 + w * pixel.1 + 0) as usize] = 255;
+            font_atlas.texture.data[(pixel.0 + w * pixel.1 + 1) as usize] = 255;
+            font_atlas.texture.data[(pixel.0 + w * pixel.1 + 2) as usize] = 255;
+            font_atlas.texture.data[(pixel.0 + w * pixel.1 + 3) as usize] = 255;
+        }
+
+        Ui {
+            input: Input::default(),
+            style: Style {
+                font_size: font_atlas.font_size as f32,
+                ..Default::default()
+            },
+            frame: 0,
+            moving: None,
+            windows: HashMap::default(),
+            windows_focus_order: vec![],
+            dragging: None,
+            active_window: None,
+            child_window_stack: vec![],
+            drag_hovered: None,
+            drag_hovered_previous_frame: None,
+            storage_u32: HashMap::default(),
+            storage_any: AnyStorage::default(),
+            font_atlas: Rc::new(font_atlas),
+            clipboard_selection: String::new(),
+            clipboard: Box::new(crate::LocalClipboard::new()),
+        }
+    }
+
 
     pub fn set_style(&mut self, style: Style) {
         self.style = style;

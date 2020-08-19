@@ -343,7 +343,9 @@ impl<'a> Editbox<'a> {
         let pos = context
             .window
             .cursor
-            .fit(size, Layout::Free(Vector2::new(5., 5.)));
+            // margin from text to parent box
+            .fit(size, Layout::Free(Vector2::new(0., 0.)))
+            ;
 
         context.window.draw_commands.clip(parent_rect);
 
@@ -366,7 +368,8 @@ impl<'a> Editbox<'a> {
             let character = text.chars().nth(n).unwrap_or(' ');
             if n == state.cursor as usize {
                 context.window.draw_commands.draw_rect(
-                    Rect::new(pos.x + x, pos.y + y - 2., 2., 13.),
+                    // Rect::new(pos.x + x, pos.y + y - 2., 2., context.global_style.font_size),
+                    Rect::new(pos.x + x, pos.y + y - 2., 2., context.global_style.font_size),
                     context
                         .global_style
                         .editbox_cursor(context.focused, input_focused),
@@ -381,11 +384,11 @@ impl<'a> Editbox<'a> {
                     .draw_character(character, pos + Vector2::new(x, y), color)
                     .unwrap_or(0.);
             }
+            // Draw selection highlight
             if state.in_selected_range(n as u32) {
                 let pos = pos + Vector2::new(x, y);
-
                 context.window.draw_commands.draw_rect(
-                    Rect::new(pos.x, pos.y - 2., advance, 13.),
+                    Rect::new(pos.x, pos.y - 2., advance, context.global_style.font_size),
                     None,
                     context.global_style.selection_background(context.focused),
                 );

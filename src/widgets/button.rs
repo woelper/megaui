@@ -37,7 +37,9 @@ impl<'a> Button<'a> {
         let context = ui.get_active_window_context();
 
         let size = self.size.unwrap_or_else(|| {
-            context.window.draw_commands.label_size(&self.label, None)
+            context.window.draw_commands
+                .label_size(&self.label, None)
+                .set_y(context.global_style.font_size)
                 + Vector2::new(
                     context.global_style.margin_button * 2.,
                     context.global_style.margin_button,
@@ -64,7 +66,8 @@ impl<'a> Button<'a> {
             &self.label,
             pos + Vector2::new(
                 context.global_style.margin_button,
-                context.global_style.margin_button,
+                // context.global_style.margin_button + size.y/2.,
+                0.,
             ),
             Some(context.global_style.text(context.focused)),
         );

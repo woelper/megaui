@@ -36,14 +36,15 @@ impl<'a> Slider<'a> {
             context.window.cursor.area.w
                 - context.global_style.margin * 3.
                 - context.window.cursor.ident,
-            19.,
+                context.global_style.font_size
+                // context.window.draw_commands.label_size(&self.label, None).y,
         );
         let pos = context.window.cursor.fit(size, Layout::Vertical);
 
         let editbox_width = 50.;
         let label_width = 100.;
         let slider_width = size.x - editbox_width - label_width;
-        let margin = 5.;
+        // let margin = 5.;
 
         let mut temp_string = context
             .storage_any
@@ -83,12 +84,12 @@ impl<'a> Slider<'a> {
             .entry(hash!(self.id, "dragging"))
             .or_insert(0);
 
-        let slider_start_x = editbox_width + pos.x + margin;
+        let slider_start_x = editbox_width + pos.x + context.global_style.margin;
         let data_pos = (*data - self.range.start) / (self.range.end - self.range.start)
             * slider_width
             + slider_start_x;
 
-        let bar_rect = Rect::new(data_pos - 4., pos.y, 8., 20.);
+        let bar_rect = Rect::new(data_pos - 4., pos.y, 8., size.y);
         let hovered = bar_rect.contains(context.input.mouse_position);
 
         if hovered && context.input.is_mouse_down() {
@@ -119,9 +120,9 @@ impl<'a> Slider<'a> {
         }
 
         context.window.draw_commands.draw_line(
-            Vector2::new(pos.x + editbox_width + margin, pos.y + size.y / 2.),
+            Vector2::new(pos.x + editbox_width + context.global_style.margin, pos.y + size.y / 2.),
             Vector2::new(
-                pos.x + editbox_width + slider_width + margin,
+                pos.x + editbox_width + slider_width + context.global_style.margin,
                 pos.y + size.y / 2.,
             ),
             context.global_style.text(context.focused),
@@ -136,7 +137,7 @@ impl<'a> Slider<'a> {
         context.window.draw_commands.draw_label(
             self.label,
             Vector2::new(
-                pos.x + editbox_width + slider_width + margin * 2.,
+                pos.x + editbox_width + slider_width + context.global_style.margin * 2.,
                 pos.y + 2.,
             ),
             context.global_style.text(context.focused),

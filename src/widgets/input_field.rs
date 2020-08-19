@@ -25,7 +25,7 @@ impl<'a> InputField<'a> {
             context.window.cursor.area.w
                 - context.global_style.margin * 2.
                 - context.window.cursor.ident,
-            19.,
+            context.global_style.font_size
         );
         let pos = context.window.cursor.fit(size, Layout::Vertical);
 
@@ -38,7 +38,7 @@ impl<'a> InputField<'a> {
 
         context.window.draw_commands.draw_label(
             self.label,
-            Vector2::new(pos.x + size.x / 2. + 5., pos.y + 2.),
+            Vector2::new(pos.x + size.x / 2. + 5., 4.),
             Color::from_rgba(0, 0, 0, 255),
         );
     }

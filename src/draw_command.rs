@@ -107,19 +107,39 @@ impl CommandsList {
         0.
     }
 
+    /// calculate character horizontal size,
+    /// usually used as an advance between current cursor position
+    /// and next potential character
+    pub fn character_height(&self, character: char) -> f32 {
+        if let Some(font_data) = self.font_atlas.character_infos.get(&character) {
+            let font_data = font_data.scale(self.font_atlas.font_size as f32);
+            let advance = font_data.left_padding + font_data.size.1 + font_data.right_padding;
+
+            return advance;
+        }
+
+        0.
+    }
+
     pub fn label_size(&self, label: &str, multiline: Option<f32>) -> Vector2 {
-	let width = label.split('\n').fold(0.0f32, |max_width, line| {
+        let width = label.split('\n').fold(0.0f32, |max_width, line| {
             max_width.max(
                 line.chars()
                     .map(|c| self.character_advance(c))
                     .sum::<f32>(),
             )
         });
-	let height = multiline.map_or(14., |line_height| {
-                line_height * label.split('\n').count() as f32
+        let h = label.chars().fold(0.0f32, |max_height, char| {
+            max_height.max(
+                self.character_height(char)
+           
+            )
         });
+        let height = multiline.map_or(h, |line_height| {
+                    line_height * label.split('\n').count() as f32
+            });
 
-	Vector2::new(width, height)
+        Vector2::new(width, height)
     }
 
     /// If character is in font atlas - will return x advance from position to potential next character position

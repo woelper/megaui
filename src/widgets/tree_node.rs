@@ -31,7 +31,7 @@ impl<'a> TreeNode<'a> {
     pub fn ui<F: FnOnce(&mut Ui)>(self, ui: &mut Ui, f: F) {
         let context = ui.get_active_window_context();
 
-        let size = Vector2::new(300., 14.);
+        let size = Vector2::new(300., context.global_style.font_size);
 
         let color = context.global_style.text(context.focused);
         let pos = context.window.cursor.fit(size, Layout::Vertical);
@@ -57,15 +57,15 @@ impl<'a> TreeNode<'a> {
         context
             .window
             .draw_commands
-            .draw_label(&*self.label, pos + Vector2::new(10., 0.), color);
+            .draw_label(&*self.label, pos + Vector2::new(size.y, 0.), color);
 
         if *opened == 1 {
-            context.window.cursor.ident += 5.;
+            context.window.cursor.ident += size.y/2.;
 
             f(ui);
 
             let context = ui.get_active_window_context();
-            context.window.cursor.ident -= 5.;
+            context.window.cursor.ident -= size.y/2.;
         }
     }
 }

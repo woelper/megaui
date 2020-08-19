@@ -2,6 +2,8 @@ use crate::types::Color;
 
 #[derive(Debug, Clone)]
 pub struct Style {
+    pub font_size: f32,
+
     pub margin: f32,
     pub title_height: f32,
 
@@ -57,8 +59,10 @@ pub struct Style {
 
 impl Default for Style {
     fn default() -> Self {
+
         Style {
-            margin: 2.0,
+            font_size: 13.0,
+            margin: 3.0,
             title_height: 14.0,
             scroll_width: 10.0,
             scroll_multiplier: 3.,
@@ -126,6 +130,17 @@ impl Style {
             self.editbox_background_focused
         } else {
             self.editbox_background_inactive
+        }
+    }
+
+    pub fn scale(&self, factor: f32) -> Self {
+        Style {
+            margin: self.margin * factor,
+            title_height: self.title_height * factor,
+            scroll_width: self.scroll_width * factor,
+            scroll_multiplier: self.scroll_multiplier * factor,
+            margin_button: self.margin_button * factor,
+            ..*self
         }
     }
 

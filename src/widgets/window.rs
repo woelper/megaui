@@ -67,7 +67,7 @@ impl Window {
 
     pub fn ui<F: FnOnce(&mut Ui)>(self, ui: &mut Ui, f: F) -> bool {
         let title_height = if self.titlebar {
-            ui.style.title_height
+            ui.style.font_size * 2.
         } else {
             0.
         };
@@ -142,8 +142,8 @@ impl Window {
                 );
             }
             context.window.draw_commands.draw_line(
-                Vector2::new(position.x, position.y + style.title_height),
-                Vector2::new(position.x + size.x, position.y + style.title_height),
+                Vector2::new(position.x, position.y + style.font_size),
+                Vector2::new(position.x + size.x, position.y + style.font_size),
                 style.window_border(focused),
             );
         }
